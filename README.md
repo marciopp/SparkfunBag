@@ -10,3 +10,5 @@ firstmean, secondmean, thirdmean and lowerlimit are parameters that can be chang
 Algoritm simply smooth instantaneous acceleration delta and gets the peaks as hits.
 
 cont is the hit count.
+
+Arduino code uploaded, but not veryfied.
