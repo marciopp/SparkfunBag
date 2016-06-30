@@ -238,10 +238,8 @@ void loop()
 
       printHits(); //Updates the display
     }
-  
-  */
   }
-
+*/
 
   //Check if we need to reset the counter and display
   if (digitalRead(resetButton) == LOW)
