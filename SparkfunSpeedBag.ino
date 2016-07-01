@@ -49,6 +49,8 @@ modified by Marcio Pereira - 30/06/2016
 
  */
 
+#include <Average.h>
+
 #include <avr/wdt.h> //We need watch dog for this program
 
 #include <Wire.h> // Used for I2C
@@ -77,11 +79,14 @@ int secondsCounter = 0;
 float x[2]; // accel
 float y[2];
 float z[2];
-float delta[90]; // delta accel
+//float delta[90]; // delta accel
+Average<float> delta(90);
 float delta_now;
-float m1[110]; // moving average of delta
+Average<float> m1(110);
+//float m1[110]; // moving average of delta
 float m1_now;
-float m2[30]; // moving average of m1
+Average<float> m2(30);
+//float m2[30]; // moving average of m1
 float m2_now;
 float finalmean[3]; // test for hit -> peak = hit
 //---------------------------------------------------
@@ -181,17 +186,20 @@ void loop()
    finalmean[2] =finalmean[3];
    finalmean[1] = finalmean[2];
   // Get the 3 magnitudes separately 
-   float x[2] = getAccelData();
+   float x[2] = getAccelData(); // <<<--- Fix to get real data
    float y[2] = getAccelData();
    float z[2] = getAccelData();
   // instantaneous acceleration delta
    delta_now=abs(x[2]-x[1])+ abs(y[2]-y[1]) + abs(z[2]-z[1]);
    //first moving average
-   m1_now = rollingAverage(delta,90,delta_now);
+   //m1_now = rollingAverage(delta,90,delta_now);
+   m1_now = delta.rolling(delta_now);
    //second moving average
-   m2_now= rollingAverage( m1, 110, m1_now);
+   //m2_now= rollingAverage( m1, 110, m1_now);
+   m2_now = m1.rolling(m1_now);
    //third moving average
-   finalmean[3]=rollingAverage(m2,30, m2_now);
+   //finalmean[3]=rollingAverage(m2,30, m2_now);
+   finalmean[3] = m2.rolling(m2_now);
    //Hit test - 80 is lower limit
    if ((finalmean[3]<finalmean[2]) && (finalmean[2]>finalmean[1]) && (finalmean[2]>80))
     {
