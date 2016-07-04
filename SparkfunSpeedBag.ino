@@ -75,7 +75,8 @@ long lastHitTime = 0;
 int secondsCounter = 0;
 
 // --------------------------------------------------
-// Variable insertion  
+// Variable insertion
+int Accel_now[3];  
 float x[2]; // accel
 float y[2];
 float z[2];
@@ -185,10 +186,11 @@ void loop()
    z[1] = z[2];
    finalmean[2] =finalmean[3];
    finalmean[1] = finalmean[2];
-  // Get the 3 magnitudes separately 
-   float x[2] = getAccelData(); // <<<--- Fix to get real data
-   float y[2] = getAccelData();
-   float z[2] = getAccelData();
+  // Get the 3 magnitudes separately
+   readAccelData(Accel_now);
+   x[2] = Accel_now[1]; 
+   y[2] = Accel_now[2];
+   z[2] = Accel_now[3];
   // instantaneous acceleration delta
    delta_now=abs(x[2]-x[1])+ abs(y[2]-y[1]) + abs(z[2]-z[1]);
    //first moving average
